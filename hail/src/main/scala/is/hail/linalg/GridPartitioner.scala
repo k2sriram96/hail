@@ -37,7 +37,14 @@ case class GridPartitioner(blockSize: Int, nRows: Long, nCols: Long, partitionIn
       bis.length < maxNBlocks))) // a block-sparse matrix cannot have all blocks present
     throw new IllegalArgumentException(s"requirement failed: Sparse blocks sequence was ${partitionIndexToBlockIndex.toIndexedSeq}")
 
-  val blockToPartitionMap = partitionIndexToBlockIndex.map(_.zipWithIndex.toMap.withDefaultValue(-1))
+  val blockToPartitionMap = {
+    println("partitionIndexToBlockIndex: " + partitionIndexToBlockIndex)
+    val d = partitionIndexToBlockIndex.map(_.zipWithIndex.toMap.withDefaultValue(-1))
+    // (1, 3) -> (0: 1, 1: 3)
+    // (1: 0, 3: 1)
+    println("d: " + d)
+    d
+  }
 
   val lastBlockRowNRows: Int = indexBlockOffset(nRows - 1) + 1
   val lastBlockColNCols: Int = indexBlockOffset(nCols - 1) + 1
@@ -61,6 +68,9 @@ case class GridPartitioner(blockSize: Int, nRows: Long, nCols: Long, partitionIn
   }
 
   def intersect(that: GridPartitioner): GridPartitioner = {
+    println("this pITBI: " + partitionIndexToBlockIndex)
+    println("that pITBI: " + that.partitionIndexToBlockIndex)
+
     copy(partitionIndexToBlockIndex = (partitionIndexToBlockIndex, that.partitionIndexToBlockIndex) match {
       case (Some(bis), Some(bis2)) => Some(bis.filter(bis2.toSet))
       case (Some(bis), None) => Some(bis)
@@ -97,9 +107,20 @@ case class GridPartitioner(blockSize: Int, nRows: Long, nCols: Long, partitionIn
       pi
   }
 
-  def blockToPartition(blockId: Int): Int = blockToPartitionMap match {
-    case Some(bpMap) => bpMap(blockId)
-    case None =>  blockId
+  // what is this for? seems fishy
+  def blockToPartition(blockId: Int): Int = {
+    println("blockToPartitionMap: " + blockToPartitionMap.toString())
+    blockToPartitionMap match {
+      case Some(bpMap) => {
+        val x = bpMap(blockId)
+        println("bpMap(" + blockId + "): " + x)
+        x
+      }
+      case None =>  {
+        println("blockId: " + blockId)
+        blockId
+      }
+    }
   }
 
   def partCoordinates(pi: Int): (Int, Int) = blockCoordinates(partitionToBlock(pi))

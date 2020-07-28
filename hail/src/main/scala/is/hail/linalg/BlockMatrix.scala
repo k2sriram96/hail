@@ -386,9 +386,10 @@ class BlockMatrix(val blocks: RDD[((Int, Int), BDM[Double])],
   def filterBlocks(blocksToKeep: Array[Int]): BlockMatrix =
     if (blocksToKeep.length == gp.maxNBlocks)
       this
-    else
+    else {
       subsetBlocks(gp.intersect(gp.copy(partitionIndexToBlockIndex = Some(blocksToKeep))))
-    
+    }
+
   // assumes subsetGP blocks are subset of gp blocks, as with subsetGP = gp.intersect(gp2)
   def subsetBlocks(subsetGP: GridPartitioner): BlockMatrix = {
     println("subsetGP:")
@@ -402,8 +403,18 @@ class BlockMatrix(val blocks: RDD[((Int, Int), BDM[Double])],
       println("subsetGP partition map:")
       println(subsetGP.partitionIndexToBlockIndex.get.map(gp.blockToPartition))
 
-      new BlockMatrix(blocks.subsetPartitions(subsetGP.partitionIndexToBlockIndex.get.map(gp.blockToPartition), Some(subsetGP)),
+      // subsetGP: 2 partitions, 2 blocks block 1 -> partition 0, block 3 -> partition 1 (blockToPartitionMap = Some(Map(1 -> 0, 3 -> 1)))
+      // gp: 4 partitions, 4 blocks, block 1 -> partition 1 etc. (blockToPartitionMap = None)
+      val jamesBm = new BlockMatrix(blocks.subsetPartitions(subsetGP.partitionIndexToBlockIndex.get.map(gp.blockToPartition), Some(subsetGP)),
         blockSize = blockSize, nRows = nRows, nCols = nCols)
+      println("jamesBm: " + jamesBm)
+      val blocksRDD = jamesBm.blocks
+      println("blocksRDD: " + blocksRDD)
+      val blocksRDDcollect = jamesBm.blocks.collect()
+      println("blocksRDDcollect: " + blocksRDDcollect)
+      println("blocksRDDcollect.toSeq: " + blocksRDDcollect.toSeq)
+      println("blah: " + jamesBm.toString())
+      jamesBm
     }
   }
   
