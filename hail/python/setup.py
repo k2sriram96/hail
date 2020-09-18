@@ -8,13 +8,33 @@ with open('hail/hail_pip_version') as f:
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-dependencies = []
-with open('requirements.txt', 'r') as f:
-    for line in f:
-        dependencies.append(line.strip())
+
+dependencies = [
+"aiohttp>=3.6,<3.7",
+"aiohttp_session>=2.7,<2.8",
+"asyncinit>=0.2.4,<0.3",
+"bokeh>1.1,<1.3",
+"decorator<5",
+"dill>=0.3.1.1,<0.4",
+"gcsfs==0.2.1",
+"humanize==1.0.0",
+"hurry.filesize==0.9",
+"nest_asyncio",
+"numpy<2",
+"pandas>0.24,<0.26",
+"parsimonious<0.9",
+"PyJWT",
+"pyspark>=2.4,<2.4.2",
+"python-json-logger==0.1.11",
+"requests>=2.21.0,<2.21.1",
+"scipy>1.2,<1.4",
+"tabulate==0.8.3",
+"tqdm==4.42.1",
+"google-cloud-storage==1.25.*"
+]
 
 setup(
-    name="hail",
+    name="hail4j11",
     version=hail_pip_version,
     author="Hail Team",
     author_email="hail@broadinstitute.org",

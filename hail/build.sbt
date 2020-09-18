@@ -1,4 +1,4 @@
-lazy val sparkVersion = "3.0.0"
+lazy val sparkVersion = "2.4.5"
 lazy val si = sparkVersion match {
   case "2.4.2" => SparkInfo("0.10.7", "0.13.2")
   case "2.4.1" => SparkInfo("0.10.7", "0.13.2")
@@ -16,8 +16,7 @@ lazy val root = (project in file(".")).
       version      := "0.2.0-SNAPSHOT"
     )),
     name := "hail",
-    resolvers += "Sonatype Releases" at "https://oss.sonatype.org/content/repositories/releases/",
-    Compile / javacOptions ++= Seq(
+2    Compile / javacOptions ++= Seq(
       "-Xlint:all"
     ),
     Compile / scalacOptions ++= Seq(

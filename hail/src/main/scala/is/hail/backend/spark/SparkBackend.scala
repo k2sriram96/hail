@@ -57,7 +57,7 @@ object SparkBackend {
     def majorMinor(version: String): String = version.split("\\.", 3).take(2).mkString(".")
 
     if (majorMinor(jarVersion) != majorMinor(sparkVersion))
-      fatal(s"This Hail JAR was compiled for Spark $jarVersion, cannot run with Spark $sparkVersion.\n" +
+      warn(s"This Hail JAR was compiled for Spark $jarVersion, may not run normally with Spark $sparkVersion.\n" +
         s"  The major and minor versions must agree, though the patch version can differ.")
     else if (jarVersion != sparkVersion)
       warn(s"This Hail JAR was compiled for Spark $jarVersion, running with Spark $sparkVersion.\n" +
