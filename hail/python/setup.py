@@ -34,7 +34,7 @@ dependencies = [
 ]
 
 setup(
-    name="hail4j11",
+    name="j11hail",
     version=hail_pip_version,
     author="Hail Team",
     author_email="hail@broadinstitute.org",
