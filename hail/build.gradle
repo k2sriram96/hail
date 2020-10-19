@@ -94,7 +94,7 @@ project.ext {
     cachedBreezeVersion = null
     
     sparkVersion = System.getProperty("spark.version", "2.4.5")
-    scalaVersion = System.getProperty("scala.version", "2.11.12")
+    scalaVersion = System.getProperty("scala.version", "2.12.11")
     scalaMajorVersion = (scalaVersion =~ /^\d+.\d+/)[0]
 }
 
